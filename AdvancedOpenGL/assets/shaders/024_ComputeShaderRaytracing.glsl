@@ -1,5 +1,7 @@
 #version 450
 
+uniform float time;
+
 layout(local_size_x = 1, local_size_y = 1) in;
 layout(rgba32f, binding = 0) uniform image2D img_output;
 
@@ -10,7 +12,7 @@ void main() {
   ivec2 pixel_coords = ivec2(gl_GlobalInvocationID.xy);
   
   // Hard coded scene
-  vec3 sphere_c = vec3(0.0, 0.0, -10.0);
+  vec3 sphere_c = vec3((cos(time) * 10), 0.0, -10.0);
   float sphere_r = 1.0;
 
   float max_x = 5.0;
@@ -22,12 +24,19 @@ void main() {
   vec3 ray_d = vec3(0.0, 0.0, -1.0); // ortho
 
   vec3 omc = ray_o - sphere_c;
-  float b = dot(ray_d, omc);
+  float a = dot(ray_d,ray_d);
+  float b = -2.0 * dot(ray_d, omc);
   float c = dot(omc, omc) - sphere_r * sphere_r;
-  float bsqmc = b * b - c;
+  float bsqmc = b * b - 4*a*c;
   // Hit one or both sides
   if (bsqmc >= 0.0) {
-    pixel = vec4(0.4, 0.4, 1.0, 1.0);
+    pixel = vec4(0.4, 0.4, 0, 1.0);
+    double h = -b - sqrt(bsqmc)  / (2.0*a);
+     if (h > 0.0) {
+        vec3 N = normalize(ray_o - vec3(0,0,-1));
+        pixel = vec4(1.0,1.0,1.0, 1.0);//vec4(0.5*N.x+1, 0.5*N.y+1,0.5*N.z+1, 1.0);
+    }
+   
   }
   
   // Output to a specific pixel in the image

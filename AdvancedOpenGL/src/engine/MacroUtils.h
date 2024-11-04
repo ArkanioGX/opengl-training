@@ -19,8 +19,8 @@
 #define SHADER_COMP(s) PATH3(SHADER_PATH,s,EXT_COMP)
 #define SHADER_ID(s) STR(s)
 
-#define SCENE_NAME Scene_021_ChangePrimitiveType
-#define SHADER_NAME IDENT(021_ChangePrimitiveType)
+#define SCENE_NAME Scene_024_ComputeShaderRaytracing
+#define SHADER_NAME IDENT(024_ComputeShaderRaytracing)
 
 /**
  * Scene_025_ComputeShaderBoids

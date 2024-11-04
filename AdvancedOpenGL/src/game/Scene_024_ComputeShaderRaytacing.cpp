@@ -120,13 +120,15 @@ void Scene_024_ComputeShaderRaytracing::load() {
 }
 
 void Scene_024_ComputeShaderRaytracing::update(float dt) {
-
 }
 
 void Scene_024_ComputeShaderRaytracing::draw()
 {
     // Launch compute shaders!
     computeShader.use();
+    GLint UnLoc = glGetUniformLocation(computeShader.id,"time");
+    glUniform1f(UnLoc,Timer::getTimeSinceStart());  
+
     glDispatchCompute((GLuint)texWidth, (GLuint)texHeight, 1);
   
     // Make sure writing to image has finished before read
