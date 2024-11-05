@@ -19,10 +19,11 @@
 #define SHADER_COMP(s) PATH3(SHADER_PATH,s,EXT_COMP)
 #define SHADER_ID(s) STR(s)
 
-#define SCENE_NAME Scene_024_ComputeShaderRaytracing
-#define SHADER_NAME IDENT(024_ComputeShaderRaytracing)
+#define SCENE_NAME Scene_027_MarchingCubes
+#define SHADER_NAME IDENT(027_MarchingCubes)
 
 /**
+ * Scene_027_MarchingCubes
  * Scene_025_ComputeShaderBoids
  * Scene_024_ComputeShaderRaytracing
  * Scene_023_ComputeShaderGrid
