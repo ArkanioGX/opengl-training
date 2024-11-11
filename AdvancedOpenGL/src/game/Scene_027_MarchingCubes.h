@@ -16,8 +16,9 @@ struct ColorUInt32 {
 };
 
 struct Voxel{
-    Vector3 position;
-    ColorUInt32 color;
+    //ColorUInt32 color;
+    bool side[8];
+    //unsigned int : 24;
 };
 
 class Scene_027_MarchingCubes : public Scene {
@@ -42,6 +43,9 @@ private:
 
     GLuint MCBuffer;
     GLuint MCRenderVao;
+
+    Matrix4 projection;
+    Matrix4 transform {};
 };
 
 #endif //Scene_027_MarchingCubes_H
