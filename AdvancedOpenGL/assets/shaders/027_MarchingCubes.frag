@@ -1,6 +1,6 @@
 #version 450 core
 
-out vec4 color;
+layout (location = 0) out vec4 color;
 
 in VS_OUT
 {
@@ -9,5 +9,5 @@ in VS_OUT
 
 void main()
 {
-    color = fs_in.color;
+    color = vec4(.8f,.0f,.7f,1.f);
 } 

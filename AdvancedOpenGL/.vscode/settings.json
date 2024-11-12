@@ -49,6 +49,15 @@
         "xtree": "cpp",
         "array": "cpp",
         "bit": "cpp",
-        "clocale": "cpp"
+        "clocale": "cpp",
+        "charconv": "cpp",
+        "format": "cpp",
+        "locale": "cpp",
+        "optional": "cpp",
+        "regex": "cpp",
+        "xlocbuf": "cpp",
+        "xlocmes": "cpp",
+        "xlocmon": "cpp",
+        "xloctime": "cpp"
     }
 }

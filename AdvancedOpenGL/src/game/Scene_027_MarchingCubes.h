@@ -18,6 +18,7 @@ struct ColorUInt32 {
 struct Voxel{
     //ColorUInt32 color;
     bool side[8];
+    float tris[12];
     //unsigned int : 24;
 };
 
@@ -41,8 +42,10 @@ private:
     ComputeShader computeShader;
     Shader renderShader;
 
-    GLuint MCBuffer;
-    GLuint MCRenderVao;
+    GLuint flockBuffer[2];
+    GLuint flockRenderVao[2];
+    GLuint geometryBuffer;
+    GLuint frameIndex;
 
     Matrix4 projection;
     Matrix4 transform {};

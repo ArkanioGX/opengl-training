@@ -1,19 +1,13 @@
-
 #version 450 core
 
-in vec4 position;
+layout (location = 0) in vec3 position;
 
-out VS_OUT
-{
-    vec4 color;
-} vs_out;
+layout (location = 2) in vec3[12] vPos;;
 
-uniform mat4 mv_matrix;
-uniform mat4 proj_matrix;
-
+uniform mat4 mvp;
 
 void main(void)
 {
-    gl_Position = proj_matrix * mv_matrix * position;
-    vs_out.color = position * 2.0 + vec4(0.5, 0.5, 0.5, 0.0);
+    gl_Position = mvp * vec4(position,0.f);
+    vs_out.color = mix(C * 0.2, C, smoothstep(0.0, 0.8, abs(N).z));
 }

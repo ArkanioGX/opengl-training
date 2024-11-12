@@ -109,6 +109,7 @@ void Scene_025_ComputeShaderBoids::load() {
         ptr[i].position = (Vector3(randomFloat(), randomFloat(), randomFloat()) - Vector3(0.5f, 0.5f, 0.5f)) * 300.0f;
         ptr[i].velocity = (Vector3(randomFloat(), randomFloat(), randomFloat()) - Vector3(0.5f, 0.5f, 0.5f));
     }
+    
 
     glUnmapBuffer(GL_ARRAY_BUFFER);
 
