@@ -47,8 +47,8 @@ private:
     GLuint geometryBuffer;
     GLuint frameIndex;
 
-    Matrix4 projection;
-    Matrix4 transform {};
+    Matrix4 proj_matrix;
+    Matrix4 transform ;
 };
 
 #endif //Scene_027_MarchingCubes_H

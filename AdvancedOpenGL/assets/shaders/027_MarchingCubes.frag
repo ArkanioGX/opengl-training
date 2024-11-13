@@ -9,5 +9,5 @@ in VS_OUT
 
 void main()
 {
-    color = vec4(.8f,.0f,.7f,1.f);
+    color = vec4(.8f,.8f,.7f,1.f);
 } 

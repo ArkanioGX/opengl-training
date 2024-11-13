@@ -85,7 +85,7 @@ void Scene_027_MarchingCubes::load()
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
 
-    transform = Matrix4::createTranslation(Vector3(0, 0, -2.0f));
+    
     
 }
 
@@ -108,6 +108,10 @@ void Scene_027_MarchingCubes::handleEvent(const InputState &)
 void Scene_027_MarchingCubes::update(float dt)
 {
     totalTime += dt;
+    float t = sin(totalTime);
+    float fov = 80.f + (abs(1*t));
+    transform = Matrix4::createTranslation(Vector3(0, 0, -8.0f));
+    proj_matrix = Matrix4::createPerspectiveFOV(fov, game->windowWidth, game->windowHeight, 0.1f, 3000.0f);
 
     //computeShader.use();
     
@@ -121,15 +125,10 @@ void Scene_027_MarchingCubes::draw()
 {
     renderShader.use();
 
+    
 
-
-    Matrix4 mv_matrix = Matrix4::createLookAt(Vector3(0.0f, 0.0f, -200.0f),
-                                            Vector3(0.0f, 0.0f, 0.0f),
-                                            Vector3(0.0f, 1.0f, 0.0f));
-    Matrix4 proj_matrix = Matrix4::createPerspectiveFOV(60.0f, game->windowWidth, game->windowHeight, 0.1f, 3000.0f);
-    Matrix4 mvp = proj_matrix * mv_matrix;
-
-    renderShader.setMatrix4("mvp", mvp);
+    Matrix4 transform = Matrix4::createTranslation(Vector3(0, 0.f, -0.8f));
+    renderShader.setMatrix4("mvp", proj_matrix*transform);
 
     glBindVertexArray(flockRenderVao[frameIndex]);
     glDrawArraysInstanced(GL_TRIANGLES, 0, 6, VOXEL_TOTAL);
