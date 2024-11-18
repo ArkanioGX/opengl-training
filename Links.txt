@@ -1,0 +1,8 @@
+https://lingtorp.com/2018/12/05/OpenGL-SSBO-indirect-drawing.html
+https://community.khronos.org/t/indirect-rendering-with-compute-shader/108197/9
+https://sites.google.com/site/john87connor/indirect-rendering/1-basic-setup
+https://ktstephano.github.io/rendering/opengl/ssbos
+https://ktstephano.github.io/rendering/opengl/prog_vtx_pulling
+https://community.khronos.org/t/indirect-rendering-with-compute-shader/108197/19
+https://community.khronos.org/t/compute-shader-slower-than-same-non-compute-operation/108174
+https://sites.google.com/site/john87connor/compute-shader/1-input-output?authuser=0
