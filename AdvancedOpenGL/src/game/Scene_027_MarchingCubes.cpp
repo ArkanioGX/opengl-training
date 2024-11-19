@@ -23,69 +23,82 @@ void Scene_027_MarchingCubes::load()
     Assets::loadComputeShader(SHADER_COMP(SHADER_NAME), SHADER_ID(SHADER_NAME));
     Assets::loadShader(SHADER_VERT(SHADER_NAME), SHADER_FRAG(SHADER_NAME), "", "", "", SHADER_ID(SHADER_NAME));
 
-    // This is position and normal data for a paper airplane
-    static const Vector3 geometry[] =
-    {
-        // Positions
-        Vector3(-0.5f, -0.5f, 0.f),
-        Vector3(0.5f, -0.5f, 0.f),
-        Vector3(-0.5f, 0.5f, 0.f),
-        Vector3(-0.5f, 0.5f, 0.f),
-        Vector3(0.5f, -0.5f, 0.f),
-        Vector3(0.5f, 0.5f, 0.f),
-    };
-
     computeShader = Assets::getComputeShader(SHADER_ID(SHADER_NAME));
     renderShader = Assets::getShader(SHADER_ID(SHADER_NAME));
+    //------------------------------------------------------------------------------------------------------------------------
+    // initial input data
+    float input[4096] = {0};
+    glGenBuffers(1, &SSBO);
+    // bind buffer to binding point 1:
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, SSBO);
+    // allocate buffer memory:
+    glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(input), input, GL_STATIC_DRAW);
+    // finished, unbind buffer
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+    // the buffer is still bound at binding point 1, but not at the generic target "GL_SHADER_STORAGE_BUFFER"
+    //------------------------------------------------------------------------------------------------------------------------
+    // setup program
+    //------------------------------------------------------------------------------------------------------------------------
+    // the shader object will be deleted when it is no longer attached to any program
+    //------------------------------------------------------------------------------------------------------------------------
+    // invoke compute shader
+    //------------------------------------------------------------------------------------------------------------------------
 
-    glGenBuffers(2, flockBuffer);
-    glBindBuffer(GL_SHADER_STORAGE_BUFFER, flockBuffer[0]);
-    glBufferData(GL_SHADER_STORAGE_BUFFER, VOXEL_TOTAL * sizeof(Voxel), NULL, GL_DYNAMIC_COPY);
-    glBindBuffer(GL_SHADER_STORAGE_BUFFER, flockBuffer[1]);
-    glBufferData(GL_SHADER_STORAGE_BUFFER, VOXEL_TOTAL * sizeof(Voxel), NULL, GL_DYNAMIC_COPY);
+    glUseProgram(computeShader.id);
+    glDispatchCompute(16, 16, 16);
+    glUseProgram(0);
 
-    int i;
+    // invokes the compute shader 1 x 1 x 1 = 10 times
 
-    glGenBuffers(1, &geometryBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, geometryBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(geometry), geometry, GL_STATIC_DRAW);
+    // each invocation can be identified by its "uvec3 gl_GlobalInvocationID"
 
-    glGenVertexArrays(2, flockRenderVao);
+    // in this case:
 
-    for (i = 0; i < 2; i++)
-    {
-        glBindVertexArray(flockRenderVao[i]);
-        glBindBuffer(GL_ARRAY_BUFFER, geometryBuffer);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    // gl_GlobalInvocationID.x will be 0 ... 9
 
-        glBindBuffer(GL_ARRAY_BUFFER, flockBuffer[i]);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Voxel), NULL);
-        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Voxel), (void *)sizeof(bool[8]));
-        glVertexAttribDivisor(1, 1);
-        glVertexAttribDivisor(2, 1);
+    // gl_GlobalInvocationID.y will be 0
 
-        glEnableVertexAttribArray(0);
-        glEnableVertexAttribArray(1);
-        glEnableVertexAttribArray(2);
-    }
+    // gl_GlobalInvocationID.z will be 0
 
-    glBindBuffer(GL_ARRAY_BUFFER, flockBuffer[0]);
-    Voxel * ptr = reinterpret_cast<Voxel *>(
-        glMapBufferRange(GL_ARRAY_BUFFER, 0, VOXEL_TOTAL * sizeof(Voxel), 
-                         GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT)
-    );
+    //------------------------------------------------------------------------------------------------------------------------
 
-    for (i = 0; i < VOXEL_TOTAL; i++)
-    {
-        ptr[i].side[0] = false;
-    }
+    // show buffer data
 
-    glUnmapBuffer(GL_ARRAY_BUFFER);
+    //------------------------------------------------------------------------------------------------------------------------
+
+    float returned_data[4096] = { 0 };
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, SSBO);
+    glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, sizeof(returned_data), returned_data);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+    for (unsigned int i = 0; i < 10; i++)
+        std::cout << "returned_data[" << i << "] = " << returned_data[i] << std::endl;
+
+    //------------------------------------------------------------------------------------------------------------------------
+
+    // ...
+    
+/*
+    std::vector<Vector3> triList(MAX_TRIS,Vector3(0,0,0));
+    glGenBuffers(1, &SSBO);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, SSBO);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(triList), triList.data(), GL_STATIC_DRAW);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+    
+    glUseProgram(computeShader.id);
+    glDispatchCompute(1, 1, 1);
+    glUseProgram(0);
+
+    std::vector<Vector3> returned_data;
+    returned_data.resize(MAX_TRIS);
+
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, SSBO);
+
+    glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, sizeof(returned_data), returned_data.data());
+
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 
     glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LEQUAL);
-
-    
+    glDepthFunc(GL_LEQUAL);*/
     
 }
 
