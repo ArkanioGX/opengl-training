@@ -6,3 +6,4 @@ https://ktstephano.github.io/rendering/opengl/prog_vtx_pulling
 https://community.khronos.org/t/indirect-rendering-with-compute-shader/108197/19
 https://community.khronos.org/t/compute-shader-slower-than-same-non-compute-operation/108174
 https://sites.google.com/site/john87connor/compute-shader/1-input-output?authuser=0
+https://www.reddit.com/r/opengl/comments/gc8fco/problem_using_vertex_data_in_compute_shaders/
