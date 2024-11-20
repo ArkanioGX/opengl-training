@@ -18,7 +18,8 @@ struct ColorUInt32 {
 
 struct Voxel{
     //ColorUInt32 color;
-    bool side[8];
+    int side;
+    float triPos[15] = {};
     //unsigned int : 24;
 };
 
@@ -43,6 +44,7 @@ private:
     Shader renderShader;
 
     GLuint SSBO;
+    GLuint SSBO2;
     GLuint flockRenderVao[2];
     GLuint geometryBuffer;
     GLuint frameIndex;

@@ -25,30 +25,47 @@ void Scene_027_MarchingCubes::load()
 
     computeShader = Assets::getComputeShader(SHADER_ID(SHADER_NAME));
     renderShader = Assets::getShader(SHADER_ID(SHADER_NAME));
-    //------------------------------------------------------------------------------------------------------------------------
-    // initial input data
-    float input[4096] = {0};
+    //bool input[] = {false, false, false, false, false,false, false, false, false, false};
+    Voxel input[4096] = {0};
+
     glGenBuffers(1, &SSBO);
+
     // bind buffer to binding point 1:
+
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, SSBO);
+
     // allocate buffer memory:
+
     glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(input), input, GL_STATIC_DRAW);
+
     // finished, unbind buffer
+
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+
     // the buffer is still bound at binding point 1, but not at the generic target "GL_SHADER_STORAGE_BUFFER"
-    //------------------------------------------------------------------------------------------------------------------------
-    // setup program
-    //------------------------------------------------------------------------------------------------------------------------
-    // the shader object will be deleted when it is no longer attached to any program
-    //------------------------------------------------------------------------------------------------------------------------
-    // invoke compute shader
+
     //------------------------------------------------------------------------------------------------------------------------
 
-    glUseProgram(computeShader.id);
+   
+
+    // setup program
+
+    //------------------------------------------------------------------------------------------------------------------------
+
+
+    //------------------------------------------------------------------------------------------------------------------------
+
+    // invoke compute shader
+
+    //------------------------------------------------------------------------------------------------------------------------
+
+    computeShader.use();
+
     glDispatchCompute(16, 16, 16);
+
     glUseProgram(0);
 
-    // invokes the compute shader 1 x 1 x 1 = 10 times
+    // invokes the compute shader 10 x 1 x 1 = 10 times
 
     // each invocation can be identified by its "uvec3 gl_GlobalInvocationID"
 
@@ -66,39 +83,17 @@ void Scene_027_MarchingCubes::load()
 
     //------------------------------------------------------------------------------------------------------------------------
 
-    float returned_data[4096] = { 0 };
+    Voxel output[4096];
+
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, SSBO);
-    glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, sizeof(returned_data), returned_data);
+
+    glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, sizeof(output), output);
+
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
-    for (unsigned int i = 0; i < 10; i++)
-        std::cout << "returned_data[" << i << "] = " << returned_data[i] << std::endl;
 
     //------------------------------------------------------------------------------------------------------------------------
 
     // ...
-    
-/*
-    std::vector<Vector3> triList(MAX_TRIS,Vector3(0,0,0));
-    glGenBuffers(1, &SSBO);
-    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, SSBO);
-    glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(triList), triList.data(), GL_STATIC_DRAW);
-    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
-    
-    glUseProgram(computeShader.id);
-    glDispatchCompute(1, 1, 1);
-    glUseProgram(0);
-
-    std::vector<Vector3> returned_data;
-    returned_data.resize(MAX_TRIS);
-
-    glBindBuffer(GL_SHADER_STORAGE_BUFFER, SSBO);
-
-    glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, sizeof(returned_data), returned_data.data());
-
-    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
-
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LEQUAL);*/
     
 }
 
