@@ -11,29 +11,28 @@ struct triangle
 
 struct voxel
 {
-    int side;
-    vec3 pos;
-    vec3 t1;
-    vec3 t2;
-    vec3 t3;
-    vec3 t4;
+    vec4 side[12];
 
 };
 
 layout (std430, binding = 1) buffer InputBlock
 {
-    voxel in_data[];
+    int in_data[];
 };
 
+layout (std430, binding = 2) buffer OutputBlock
+{
+    voxel out_data[];
+};
+
+float tileSize = 0.5;
 
 void main() {
     int global_id = int(gl_GlobalInvocationID.x) * 256 + int(gl_GlobalInvocationID.y) * 16 + int(gl_GlobalInvocationID.z);
-    int local_id  = int(gl_LocalInvocationID.x);
-    in_data[global_id].side = 1;
-    in_data.pos = vec3(1.f,1.f,1.f);
-    in_data.t1= vec3(1.f,1.f,1.f);
-    in_data.t2 = vec3(1.f,1.f,1.f);
-    in_data.t3 = vec3(1.f,1.f,1.f);
-    in_data.t4 = vec3(1.f,1.f,1.f);
+    vec3 tilePos = vec3(gl_GlobalInvocationID.x*tileSize,gl_GlobalInvocationID.y*tileSize,gl_GlobalInvocationID.z*tileSize);
+
+    out_data[global_id].side[0] = vec4(tilePos.x -0.25f,    tilePos.y + 0.25f,  tilePos.z -0.25f,1.0f);
+    out_data[global_id].side[1] = vec4(tilePos.x -0.25f,    tilePos.y -0.25f,   tilePos.z -0.25f,1.0f);
+    out_data[global_id].side[2] = vec4(tilePos.x + 0.25f,   tilePos.y -0.25f,   tilePos.z -0.25f,1.0f);
     //barrier();
 }

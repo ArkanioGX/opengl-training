@@ -17,10 +17,7 @@ struct ColorUInt32 {
 };
 
 struct Voxel{
-    //ColorUInt32 color;
-    int side;
-    float triPos[15] = {};
-    //unsigned int : 24;
+    Vector4 tris[12];
 };
 
 class Scene_027_MarchingCubes : public Scene {
@@ -45,12 +42,15 @@ private:
 
     GLuint SSBO;
     GLuint SSBO2;
-    GLuint flockRenderVao[2];
-    GLuint geometryBuffer;
-    GLuint frameIndex;
+    GLuint GEOMETRY;
+    GLuint VAO;
+    GLuint VBO;
 
     Matrix4 proj_matrix;
     Matrix4 transform ;
+    Matrix4 rotation;
+
+    std::vector<Vector3> vertices;
 };
 
 #endif //Scene_027_MarchingCubes_H
