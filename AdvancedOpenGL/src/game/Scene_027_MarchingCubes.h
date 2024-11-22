@@ -6,7 +6,7 @@
 #include "../engine/MeshObject.h"
 
 constexpr int MAX_TRIS = 4096;
-constexpr int VOXEL_SIDE = 16;
+constexpr int VOXEL_SIDE = 4;
 constexpr int VOXEL_TOTAL = VOXEL_SIDE * VOXEL_SIDE * VOXEL_SIDE;
 
 struct ColorUInt32 {

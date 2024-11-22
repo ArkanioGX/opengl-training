@@ -32,7 +32,7 @@ void Scene_027_MarchingCubes::load()
     computeShader = Assets::getComputeShader(SHADER_ID(SHADER_NAME));
     renderShader = Assets::getShader(SHADER_ID(SHADER_NAME));
     //bool input[] = {false, false, false, false, false,false, false, false, false, false};
-    int input[3375] = {};
+    int input[64] = {};
     glGenBuffers(1, &SSBO);
 
     // bind buffer to binding point 1:
@@ -44,7 +44,7 @@ void Scene_027_MarchingCubes::load()
     // finished, unbind buffer
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 
-    Voxel output[3375];
+    Voxel output[64];
     glGenBuffers(1, &SSBO2);
     // bind buffer to binding point 1:
 
@@ -93,10 +93,13 @@ void Scene_027_MarchingCubes::load()
     // show buffer data
 
     //------------------------------------------------------------------------------------------------------------------------
+    glMemoryBarrier(GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
 
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, SSBO2);
     glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, sizeof(output), output);
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+
+
 
     //vertices.resize(MAX_TRIS*3);
     for (int i = 0; i < sizeof(output)/sizeof(Voxel); i++){
@@ -110,6 +113,8 @@ void Scene_027_MarchingCubes::load()
         }
     }
 
+    
+
 // Generate data and put it in buffer object
   glGenBuffers(1, &VBO);
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -118,7 +123,7 @@ void Scene_027_MarchingCubes::load()
   LOG(Info) << "vertexPositions size " << sizeof(vertices);
 
   // Setup vertex attribute
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+  glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
   glEnableVertexAttribArray(0);
     
 }
@@ -144,12 +149,13 @@ void Scene_027_MarchingCubes::update(float dt)
     totalTime += dt;
     float ts = sin(totalTime);
     float tc = cos(totalTime);
-    float fov = 90.f ;//+ (abs(1*ts));
+    float fov = 70.f ;//+ (abs(1*ts));
     float dist = 10;
     Vector3 pos = Vector3(ts, 0, tc)*dist;
-    transform = Matrix4::createTranslation(pos);
     rotation = Matrix4::createLookAt(pos,Vector3(0,0,0),Vector3::unitY);
     proj_matrix = Matrix4::createPerspectiveFOV(fov, game->windowWidth, game->windowHeight, 0.1f, 3000.0f);
+
+    
 }
 
 void Scene_027_MarchingCubes::draw()
@@ -158,8 +164,9 @@ void Scene_027_MarchingCubes::draw()
     glClearBufferfv(GL_COLOR, 0, bgColor);
 
     renderShader.use();
-    renderShader.setMatrix4("mvp", proj_matrix * transform );
-    glDrawArrays(GL_TRIANGLES, 0, 60);
+    renderShader.setMatrix4("mvp", proj_matrix * rotation );
+    glDrawElements(GL_TRIANGLES,sizeof(Vector3) * vertices.size(),GL_FLOAT_VEC3,0);
+    //glDrawArrays(GL_TRIANGLES, 0, sizeof(Vector3) * vertices.size());
 
 }
 

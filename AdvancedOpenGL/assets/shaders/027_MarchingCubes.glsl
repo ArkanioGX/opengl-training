@@ -34,5 +34,5 @@ void main() {
     out_data[global_id].side[0] = vec4(tilePos.x -0.25f,    tilePos.y + 0.25f,  tilePos.z -0.25f,1.0f);
     out_data[global_id].side[1] = vec4(tilePos.x -0.25f,    tilePos.y -0.25f,   tilePos.z -0.25f,1.0f);
     out_data[global_id].side[2] = vec4(tilePos.x + 0.25f,   tilePos.y -0.25f,   tilePos.z -0.25f,1.0f);
-    //barrier();
+    
 }
